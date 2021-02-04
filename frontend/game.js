@@ -19,6 +19,7 @@ socket.on("init", (msg) => {
 });
 socket.on("gameUpdate", (data) => {
     currentState = JSON.parse(data);
+    console.log(currentState)
 });
 
 function preload() {
