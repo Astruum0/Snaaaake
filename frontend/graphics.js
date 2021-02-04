@@ -1,4 +1,4 @@
-function drawState(state, sprites) {
+function drawState(state, sprites, count) {
     // Food
     fill(255, 0, 0);
     image(

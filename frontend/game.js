@@ -9,13 +9,12 @@ var spritesData;
 
 socket.on("init", (msg) => {
     console.log(msg.content);
-    console.log(msg.id);
     playerID = msg.id;
     if (playerID == "spec") {
         spec = true;
     }
     if (!spec) {
-        socket.emit("addSnake", { pseudo: "Astruum", id: playerID });
+        socket.emit("addSnake", { pseudo: "Player " + playerID, id: playerID });
     }
 });
 socket.on("gameUpdate", (data) => {
@@ -30,13 +29,12 @@ function setup() {
     frameRate(FPS);
     createCanvas(WIN_SIZE, WIN_SIZE);
     spritesData = createSpriteData(spritesheet);
-    console.log(spritesData);
 }
 
 function draw() {
     background(0);
     if (currentState) {
-        drawState(currentState, spritesData);
+        drawState(currentState, spritesData, frameCount % 30);
     }
 }
 
