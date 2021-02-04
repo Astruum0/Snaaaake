@@ -1,3 +1,4 @@
+var win_size = 600;
 var win_block_size = 60;
 var start_length = 10;
 var start_coords = [
@@ -8,7 +9,7 @@ var start_coords = [
 ];
 
 class Snake {
-    constructor(id, name, win_size) {
+    constructor(id, name) {
         this.id = id;
         this.name = name;
         this.block_size = win_size / win_block_size;
@@ -20,7 +21,7 @@ class Snake {
                 null,
             ]);
         }
-        this.current_direction = "Down";
+        this.current_direction = start_coords[this.id][2];
         this.lives = 3;
     }
 
@@ -118,3 +119,7 @@ class Snake {
         this.composition.push(new_block);
     }
 }
+
+module.exports = {
+    Snake,
+};
