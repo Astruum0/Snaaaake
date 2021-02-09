@@ -20,6 +20,10 @@ socket.on("init", (msg) => {
 socket.on("gameUpdate", (data) => {
     currentState = JSON.parse(data);
 });
+socket.on("dead", () => {
+    playerID = "spec";
+    console.log("DEAD");
+});
 
 function preload() {
     spritesheet = loadImage("spritesheet.png");
@@ -34,20 +38,22 @@ function setup() {
 function draw() {
     background(0);
     if (currentState) {
-        drawState(currentState, spritesData, frameCount % 30);
+        drawState(currentState, spritesData, frameCount % 16);
     }
 }
 
 function keyPressed() {
-    if (keyCode === UP_ARROW) {
-        socket.emit("move", { playerID: playerID, direction: "Up" });
-    } else if (keyCode === DOWN_ARROW) {
-        socket.emit("move", { playerID: playerID, direction: "Down" });
-    } else if (keyCode === LEFT_ARROW) {
-        socket.emit("move", { playerID: playerID, direction: "Left" });
-    } else if (keyCode === RIGHT_ARROW) {
-        socket.emit("move", { playerID: playerID, direction: "Right" });
-    } else if (keyCode === 32) {
-        socket.emit("gameStart", 1);
+    if (playerID != "spec") {
+        if (keyCode === UP_ARROW) {
+            socket.emit("move", { playerID: playerID, direction: "Up" });
+        } else if (keyCode === DOWN_ARROW) {
+            socket.emit("move", { playerID: playerID, direction: "Down" });
+        } else if (keyCode === LEFT_ARROW) {
+            socket.emit("move", { playerID: playerID, direction: "Left" });
+        } else if (keyCode === RIGHT_ARROW) {
+            socket.emit("move", { playerID: playerID, direction: "Right" });
+        } else if (keyCode === 32) {
+            socket.emit("gameStart", 1);
+        }
     }
 }
