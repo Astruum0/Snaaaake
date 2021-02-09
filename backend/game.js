@@ -38,10 +38,23 @@ class Game {
                 this.food = new Food();
                 this.players[key].grow();
             }
-            if (this.players[key].collide_with_others(this.players)) {
-                // console.log(this.players[i].id, "ouch");
+            if (!this.players[key].immune &&
+                this.players[key].collide(this.players)
+            ) {
+                this.players[key].hit();
+                this.players[key].setImmune(3);
             }
         }
+    }
+
+    deadSnakes() {
+        var deadSnakesID = [];
+        for (var key in this.players) {
+            if (this.players[key].lives == 0) {
+                deadSnakesID.push(key);
+            }
+        }
+        return deadSnakesID;
     }
 }
 

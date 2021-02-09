@@ -8,8 +8,10 @@ function drawState(state, sprites, count) {
     );
 
     // Players
+    var playerIndex = 0;
     var i = 0;
     for (var key in state.players) {
+        i = state.players[key].immune ? 4 : playerIndex;
         fill(255);
         for (var j = 0; j < state.players[key].composition.length; j++) {
             var x = state.players[key].composition[j][0];
@@ -106,13 +108,16 @@ function drawState(state, sprites, count) {
                             break;
                     }
             }
-            image(
-                sprite,
-                x * state.players[key].block_size,
-                y * state.players[key].block_size
-            );
+
+            if (!(state.players[key].immune && count < 8)) {
+                image(
+                    sprite,
+                    x * state.players[key].block_size,
+                    y * state.players[key].block_size
+                );
+            }
         }
-        i++;
+        playerIndex++;
     }
 }
 
@@ -139,9 +144,9 @@ function createSpriteData(spritesheet) {
             right: [],
         },
     };
-    spritesheet.resize(200, 40);
+    spritesheet.resize(250, 40);
     spriteData.food = spritesheet.get(0, 30, 10, 10);
-    for (var offset = 0; offset < 200; offset += 50) {
+    for (var offset = 0; offset < 250; offset += 50) {
         spriteData.head.up.push(spritesheet.get(30 + offset, 0, 10, 10));
         spriteData.head.down.push(spritesheet.get(40 + offset, 10, 10, 10));
         spriteData.head.left.push(spritesheet.get(30 + offset, 10, 10, 10));

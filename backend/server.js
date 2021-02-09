@@ -34,6 +34,11 @@ function gameLoop() {
     var loop = setInterval(() => {
         if (gameStarted) {
             game.update();
+            var currentDeadSnakesID = game.deadSnakes();
+            for (var i = 0; i < currentDeadSnakesID.length; i++) {
+                users[currentDeadSnakesID[i]].emit("dead");
+                delete game.players[currentDeadSnakesID[i]];
+            }
         }
         if (Object.keys(users).length == 0) {
             gameStarted = false;
