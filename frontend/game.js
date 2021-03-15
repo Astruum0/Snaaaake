@@ -1,4 +1,4 @@
-var socket = io("http://localhost:3000");
+var socket = io("http://localhost:3001");
 var WIN_SIZE = 600;
 var FPS = 30;
 var currentState;
@@ -7,14 +7,31 @@ var spec = false;
 var spritesheet;
 var spritesData;
 
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function(item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
+
 socket.on("init", (msg) => {
     console.log(msg.content);
     playerID = msg.id;
+    playerName = findGetParameter("name");
     if (playerID == "spec") {
         spec = true;
     }
     if (!spec) {
-        socket.emit("addSnake", { pseudo: "Player " + playerID, id: playerID });
+        socket.emit("addSnake", {
+            pseudo: playerName ? playerName : "Player",
+            id: playerID,
+        });
     }
 });
 socket.on("gameUpdate", (data) => {

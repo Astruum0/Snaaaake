@@ -1,3 +1,5 @@
+const port = 3001;
+
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
@@ -37,7 +39,17 @@ function gameLoop() {
             var currentDeadSnakesID = game.deadSnakes();
             for (var i = 0; i < currentDeadSnakesID.length; i++) {
                 users[currentDeadSnakesID[i]].emit("dead");
+                game.deadPlayers[currentDeadSnakesID[i]] =
+                    game.players[currentDeadSnakesID[i]];
                 delete game.players[currentDeadSnakesID[i]];
+            }
+        }
+        if (Object.keys(game.players).length == 1 && !game.winner) {
+            for (key in game.players) {
+                gameStarted = false;
+                game.setWinner(key);
+                clearInterval(loop);
+                break;
             }
         }
         if (Object.keys(users).length == 0) {
@@ -70,4 +82,4 @@ function startGame() {
     gameStarted = true;
 }
 
-io.listen(3000);
+io.listen(port);
