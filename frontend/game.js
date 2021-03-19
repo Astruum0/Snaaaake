@@ -1,4 +1,5 @@
 var socket = io("http://localhost:3001");
+
 var WIN_SIZE = 600;
 var FPS = 30;
 var currentState;
