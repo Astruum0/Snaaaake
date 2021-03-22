@@ -1,4 +1,5 @@
 var socket = io("http://localhost:3001");
+var redisSocket = io("http://localhost:3000");
 
 var WIN_SIZE = 600;
 var FPS = 30;
@@ -43,8 +44,13 @@ socket.on("dead", () => {
     console.log("DEAD");
 });
 
+redisSocket.on("getAllServers", (servers) => {
+    console.log(servers);
+});
+
 function preload() {
     spritesheet = loadImage("spritesheet.png");
+    redisSocket.emit("getAllServers");
 }
 
 function setup() {

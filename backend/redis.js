@@ -1,8 +1,6 @@
 const redis = require("redis");
 const redisClient = redis.createClient();
 
-// const io = require("socket.io")();
-
 redisClient.on("error", function(error) {
     console.error(error);
 });
@@ -87,11 +85,22 @@ const deleteServer = (id) => {
     redisClient.DEL(id);
 };
 
-// setServerStatus("JzFad", false);
-// getServerInfos("JzFad").then(console.log);
-//console.log(createNewServer(3003));
+const getServerIDFromPort = (port) => {
+    return new Promise((resolve, reject) => {
+        getAllServers().then((servers) => {
+            for (var i = 0; i < servers.length; i++) {
+                if (servers[i].port == port) {
+                    resolve(servers[i].id);
+                }
+            }
+            reject("Error - Invalid port");
+        });
+    });
+};
 
-deleteServer("8LP6L");
-getAllServers().then(console.log);
-
-//io.listen(3000);
+module.exports = {
+    setServerStatus,
+    setServerPlayers,
+    getServerIDFromPort,
+    getAllServers,
+};

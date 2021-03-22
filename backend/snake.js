@@ -25,8 +25,24 @@ class Snake {
             ]);
         }
         this.current_direction = start_coords[this.id][2];
-        this.lives = 1;
+        this.lives = 3;
         this.immune = false;
+        this.color = colors[this.id];
+    }
+
+    updateId(id) {
+        this.id = id;
+        this.composition = [
+            [...start_coords[this.id]]
+        ];
+        for (var i = 0; i < start_length; i++) {
+            this.composition.push([
+                this.composition[0][0],
+                this.composition[0][1],
+                null,
+            ]);
+        }
+        this.current_direction = start_coords[this.id][2];
         this.color = colors[this.id];
     }
 
