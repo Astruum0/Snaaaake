@@ -1,4 +1,4 @@
-var socket = io("http://localhost:3001");
+var socket;
 var redisSocket = io("http://localhost:3000");
 
 var WIN_SIZE = 600;
@@ -22,27 +22,38 @@ function findGetParameter(parameterName) {
     return result;
 }
 
-socket.on("init", (msg) => {
-    console.log(msg.content);
-    playerID = msg.id;
-    playerName = findGetParameter("name");
-    if (playerID == "spec") {
-        spec = true;
-    }
-    if (!spec) {
-        socket.emit("addSnake", {
-            pseudo: playerName ? playerName : "Player",
-            id: playerID,
-        });
-    }
+redisSocket.on("getPortFromID", (port) => {
+    socket = io("http://localhost:" + port);
+
+    socket.on("init", (msg) => {
+        console.log(msg.content);
+        playerID = msg.id;
+        playerName = findGetParameter("name");
+        if (playerID == "spec") {
+            spec = true;
+        }
+        if (!spec) {
+            socket.emit("addSnake", {
+                pseudo: playerName ? playerName : "Player",
+                id: playerID,
+            });
+        }
+    });
+    socket.on("gameUpdate", (data) => {
+        currentState = JSON.parse(data);
+    });
+    socket.on("dead", () => {
+        playerID = "spec";
+        console.log("DEAD");
+    });
 });
-socket.on("gameUpdate", (data) => {
-    currentState = JSON.parse(data);
-});
-socket.on("dead", () => {
-    playerID = "spec";
-    console.log("DEAD");
-});
+
+var id = findGetParameter("id");
+if (id) {
+    redisSocket.emit("sendID", id);
+} else {
+    //window.location.href = " ";
+}
 
 redisSocket.on("getAllServers", (servers) => {
     console.log(servers);
@@ -50,7 +61,6 @@ redisSocket.on("getAllServers", (servers) => {
 
 function preload() {
     spritesheet = loadImage("spritesheet.png");
-    redisSocket.emit("getAllServers");
 }
 
 function setup() {

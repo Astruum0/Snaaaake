@@ -103,4 +103,5 @@ module.exports = {
     setServerPlayers,
     getServerIDFromPort,
     getAllServers,
+    getServerInfos,
 };

@@ -1,4 +1,4 @@
-const port = 3001;
+const port = 3002;
 
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
@@ -15,6 +15,7 @@ var users = {};
 var serverID;
 getServerIDFromPort(port).then((id) => {
     serverID = id;
+    console.log(serverID);
 });
 
 var gameStarted = false;
