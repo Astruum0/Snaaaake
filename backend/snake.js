@@ -1,19 +1,22 @@
 var win_size = 600;
 var win_block_size = 60;
-var start_length = 100;
+var start_length = 10;
 var start_coords = [
     [1, 1, "Right"],
     [win_block_size - 2, 1, "Down"],
     [1, win_block_size - 2, "Up"],
     [win_block_size - 2, win_block_size - 2, "Left"],
 ];
+var colors = ["#4ACA64", "#6E86FF", "#FF2E73", "#F7B053"];
 
 class Snake {
-    constructor(id, name) {
+    constructor(id, name, colorId) {
         this.id = id;
         this.name = name;
         this.block_size = win_size / win_block_size;
-        this.composition = [start_coords[this.id]];
+        this.composition = [
+            [...start_coords[this.id]]
+        ];
         for (var i = 0; i < start_length; i++) {
             this.composition.push([
                 this.composition[0][0],
@@ -24,6 +27,23 @@ class Snake {
         this.current_direction = start_coords[this.id][2];
         this.lives = 3;
         this.immune = false;
+        this.color = colors[this.id];
+    }
+
+    updateId(id) {
+        this.id = id;
+        this.composition = [
+            [...start_coords[this.id]]
+        ];
+        for (var i = 0; i < start_length; i++) {
+            this.composition.push([
+                this.composition[0][0],
+                this.composition[0][1],
+                null,
+            ]);
+        }
+        this.current_direction = start_coords[this.id][2];
+        this.color = colors[this.id];
     }
 
     update(win_size) {
@@ -97,7 +117,7 @@ class Snake {
 
     collide(players) {
         for (var key in players) {
-            if (players[key].id != this.id) {
+            if (players[key].id != this.id && !players[key].immune) {
                 for (var j = 0; j < players[key].composition.length; j++) {
                     if (
                         this.composition[0][0] == players[key].composition[j][0] &&
