@@ -1,123 +1,127 @@
 function drawState(state, sprites, count) {
-    // Food
-    fill(255, 0, 0);
-    image(
-        sprites.food,
-        state.food.x * state.food.size,
-        state.food.y * state.food.size
-    );
+    if (state.winner) {
+        fill(state.winner.color);
+        textSize(40);
+        textAlign(CENTER, CENTER);
+        text(state.winner.name + " wins !", 0, 0, 600, 600);
+    } else {
+        fill(255, 0, 0);
+        image(
+            sprites.food,
+            state.food.x * state.food.size,
+            state.food.y * state.food.size
+        );
 
-    // Players
-    var playerIndex = 0;
-    var i = 0;
-    for (var key in state.players) {
-        i = state.players[key].immune ? 4 : playerIndex;
-        fill(255);
-        for (var j = 0; j < state.players[key].composition.length; j++) {
-            var x = state.players[key].composition[j][0];
-            var y = state.players[key].composition[j][1];
+        // Players
+        var i = 0;
+        for (var key in state.players) {
+            i = state.players[key].immune ? 4 : state.players[key].id;
+            fill(255);
+            for (var j = 0; j < state.players[key].composition.length; j++) {
+                var x = state.players[key].composition[j][0];
+                var y = state.players[key].composition[j][1];
 
-            var sprite = spritesData.head.down[i];
-            switch (j) {
-                case 0:
-                    switch (state.players[key].composition[j][2]) {
-                        case "Up":
-                            sprite = spritesData.head.up[i];
-                            break;
-                        case "Down":
-                            sprite = spritesData.head.down[i];
-                            break;
-                        case "Left":
-                            sprite = spritesData.head.left[i];
-                            break;
-                        case "Right":
-                            sprite = spritesData.head.right[i];
-                            break;
-                    }
-                    break;
-                case state.players[key].composition.length - 1:
-                    switch (state.players[key].composition[j][2]) {
-                        case "Up":
-                            sprite = spritesData.tail.down[i];
-                            break;
-                        case "Down":
-                            sprite = spritesData.tail.up[i];
-                            break;
-                        case "Left":
-                            sprite = spritesData.tail.right[i];
-                            break;
-                        case "Right":
-                            sprite = spritesData.tail.left[i];
-                            break;
-                    }
-                    break;
-                default:
-                    switch (state.players[key].composition[j][2]) {
-                        case "Up":
-                        case "Down":
-                            if (
-                                state.players[key].composition[j][2] == "Up" &&
-                                state.players[key].composition[j + 1][2] == "Left"
-                            ) {
-                                sprite = spritesData.body.U_R[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Up" &&
-                                state.players[key].composition[j + 1][2] == "Right"
-                            ) {
-                                sprite = spritesData.body.U_L[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Down" &&
-                                state.players[key].composition[j + 1][2] == "Left"
-                            ) {
-                                sprite = spritesData.body.D_R[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Down" &&
-                                state.players[key].composition[j + 1][2] == "Right"
-                            ) {
-                                sprite = spritesData.body.D_L[i];
-                            } else {
-                                sprite = spritesData.body.U_D[i];
-                            }
+                var sprite = spritesData.head.down[i];
+                switch (j) {
+                    case 0:
+                        switch (state.players[key].composition[j][2]) {
+                            case "Up":
+                                sprite = spritesData.head.up[i];
+                                break;
+                            case "Down":
+                                sprite = spritesData.head.down[i];
+                                break;
+                            case "Left":
+                                sprite = spritesData.head.left[i];
+                                break;
+                            case "Right":
+                                sprite = spritesData.head.right[i];
+                                break;
+                        }
+                        break;
+                    case state.players[key].composition.length - 1:
+                        switch (state.players[key].composition[j][2]) {
+                            case "Up":
+                                sprite = spritesData.tail.down[i];
+                                break;
+                            case "Down":
+                                sprite = spritesData.tail.up[i];
+                                break;
+                            case "Left":
+                                sprite = spritesData.tail.right[i];
+                                break;
+                            case "Right":
+                                sprite = spritesData.tail.left[i];
+                                break;
+                        }
+                        break;
+                    default:
+                        switch (state.players[key].composition[j][2]) {
+                            case "Up":
+                            case "Down":
+                                if (
+                                    state.players[key].composition[j][2] == "Up" &&
+                                    state.players[key].composition[j + 1][2] == "Left"
+                                ) {
+                                    sprite = spritesData.body.U_R[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Up" &&
+                                    state.players[key].composition[j + 1][2] == "Right"
+                                ) {
+                                    sprite = spritesData.body.U_L[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Down" &&
+                                    state.players[key].composition[j + 1][2] == "Left"
+                                ) {
+                                    sprite = spritesData.body.D_R[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Down" &&
+                                    state.players[key].composition[j + 1][2] == "Right"
+                                ) {
+                                    sprite = spritesData.body.D_L[i];
+                                } else {
+                                    sprite = spritesData.body.U_D[i];
+                                }
 
-                            break;
-                        case "Left":
-                        case "Right":
-                            if (
-                                state.players[key].composition[j][2] == "Left" &&
-                                state.players[key].composition[j + 1][2] == "Up"
-                            ) {
-                                sprite = spritesData.body.D_L[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Left" &&
-                                state.players[key].composition[j + 1][2] == "Down"
-                            ) {
-                                sprite = spritesData.body.U_L[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Right" &&
-                                state.players[key].composition[j + 1][2] == "Up"
-                            ) {
-                                sprite = spritesData.body.D_R[i];
-                            } else if (
-                                state.players[key].composition[j][2] == "Right" &&
-                                state.players[key].composition[j + 1][2] == "Down"
-                            ) {
-                                sprite = spritesData.body.U_R[i];
-                            } else {
-                                sprite = spritesData.body.L_R[i];
-                            }
-                            break;
-                    }
-            }
+                                break;
+                            case "Left":
+                            case "Right":
+                                if (
+                                    state.players[key].composition[j][2] == "Left" &&
+                                    state.players[key].composition[j + 1][2] == "Up"
+                                ) {
+                                    sprite = spritesData.body.D_L[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Left" &&
+                                    state.players[key].composition[j + 1][2] == "Down"
+                                ) {
+                                    sprite = spritesData.body.U_L[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Right" &&
+                                    state.players[key].composition[j + 1][2] == "Up"
+                                ) {
+                                    sprite = spritesData.body.D_R[i];
+                                } else if (
+                                    state.players[key].composition[j][2] == "Right" &&
+                                    state.players[key].composition[j + 1][2] == "Down"
+                                ) {
+                                    sprite = spritesData.body.U_R[i];
+                                } else {
+                                    sprite = spritesData.body.L_R[i];
+                                }
+                                break;
+                        }
+                }
 
-            if (!(state.players[key].immune && count < 8)) {
-                image(
-                    sprite,
-                    x * state.players[key].block_size,
-                    y * state.players[key].block_size
-                );
+                if (!(state.players[key].immune && count < 8)) {
+                    image(
+                        sprite,
+                        x * state.players[key].block_size,
+                        y * state.players[key].block_size
+                    );
+                }
             }
         }
-        playerIndex++;
     }
 }
 

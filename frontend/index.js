@@ -1,39 +1,14 @@
-const serversStates = [
-    {
-    id: 1,
-    players: 2,
-    playing: false
-    },
-    {
-    id: 2,
-    players: 4,
-    playing: true
-    }, 
-    {
-    id: 3,
-    players: 3,
-    playing: true
-    },
-    {
-    id: 4,
-    players: 1,
-    playing: false
-    }, 
-    {
-    id: 5,
-    players: 4,
-    playing: true
-    },
-    {
-    id: 6,
-    players: 3,
-    playing: false
-    }, 
-];
+var redisSocket = io("http://localhost:3000");
+var serversStates = null
+redisSocket.on("getAllServers", (servers) => {
+    console.log(servers);
+    serversStates = servers
+    refresh()
+});
+redisSocket.emit("getAllServers")
 
 function clear(){
     for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
-        console.log(i)
         var card_deck = document.getElementById("server" + i)
         if (typeof(card_deck) != 'undefined' && card_deck != null){
             card_deck.remove()
@@ -57,9 +32,11 @@ function refresh() {
         if (serversStates[i].playing){
             var game_status = "En jeu"
             var game_status_color = "bg-danger"
+            var game_button = "Regarder"
         } else {
             var game_status = "En attente"
             var game_status_color = "bg-success"
+            var game_button = "Rejoindre"
         }
 
         var card = document.createElement("div")
@@ -68,8 +45,7 @@ function refresh() {
 
         var header = document.createElement("div")
         header.classList.add("card-header")
-        header.innerHTML = "Serveur " + serversStates[i].id
-
+        header.innerHTML = "Serveur " + (i + 1)
         var body = document.createElement("div")
         body.classList.add("card-body")
     
@@ -80,15 +56,26 @@ function refresh() {
         status.classList.add("card-text")
         status.innerHTML = "Status : " + game_status
 
-        var button = document.createElement("button")
+        var form = document.createElement("form");
+        form.setAttribute('method',"post");
+        form.setAttribute('action',"game.html?id=" + serversStates[i].id + "&username=" + "Matteo");
+
+        var button = document.createElement("input");
         button.classList.add("btn", "btn-primary", "btn-sm", "btn-lg", "rounded", "float-sm-right")
-        button.innerHTML = "Rejoindre"
+        button.setAttribute('type',"submit");
+        button.setAttribute('value',game_button);
+        
 
         server.appendChild(card)
         card.appendChild(header)
         card.appendChild(body)
         body.appendChild(title)
         body.appendChild(status)
-        status.appendChild(button)
+        status.appendChild(form)
+        form.appendChild(button);
     }
+}
+
+function getserv(){
+    redisSocket.emit("getAllServers")
 }

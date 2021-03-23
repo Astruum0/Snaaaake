@@ -18,33 +18,41 @@ class Food {
 
 class Game {
     constructor() {
-            this.food = new Food();
-            this.players = {};
-            // this.addplayers();
-        }
-        // addplayers() {
-        //     this.players = [
-        //         new Snake(0, "Astruum", WIN_SIZE),
-        //         new Snake(1, "B", WIN_SIZE),
-        //         new Snake(2, "C", WIN_SIZE),
-        //         new Snake(3, "D", WIN_SIZE),
-        //     ];
-        // }
+        this.food = new Food();
+        this.players = {};
+        this.deadPlayers = {};
+        this.winner = null;
+    }
 
     update() {
-        for (var key in this.players) {
-            this.players[key].update();
-            if (this.players[key].eat_food(this.food)) {
-                this.food = new Food();
-                this.players[key].grow();
-            }
-            if (!this.players[key].immune &&
-                this.players[key].collide(this.players)
-            ) {
-                this.players[key].hit();
-                this.players[key].setImmune(3);
+        if (!this.winner) {
+            for (var key in this.players) {
+                this.players[key].update();
+                if (this.players[key].eat_food(this.food)) {
+                    this.food = new Food();
+                    this.players[key].grow();
+                }
+                if (!this.players[key].immune &&
+                    this.players[key].collide(this.players)
+                ) {
+                    this.players[key].hit();
+                    this.players[key].setImmune(3);
+                }
             }
         }
+    }
+    resetGame() {
+        this.food = new Food();
+        this.players = {};
+        this.deadPlayers = {};
+        this.winner = null;
+    }
+
+    setWinner(playerKey) {
+        this.winner = this.players[playerKey];
+        setTimeout(() => {
+            this.resetGame();
+        }, 3000);
     }
 
     deadSnakes() {
