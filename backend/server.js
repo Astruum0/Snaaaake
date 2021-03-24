@@ -58,8 +58,12 @@ function gameLoop() {
         if (Object.keys(game.players).length == 1 && !game.winner) {
             for (key in game.players) {
                 gameStarted = false;
-                setServerStatus(serverID, false);
+
                 game.setWinner(key);
+                setTimeout(() => {
+                    setServerStatus(serverID, false);
+                    //console.log(users);
+                }, 3000);
                 clearInterval(loop);
                 break;
             }
@@ -75,6 +79,10 @@ function gameLoop() {
 function clientLoop(clientID) {
     var clientloop = setInterval(() => {
         if (users[clientID].disconnected) {
+            if (gameStarted) {
+                game.deadPlayers[clientID] = game.players[clientID];
+            }
+
             delete users[clientID];
             delete game.players[clientID];
 

@@ -9,6 +9,20 @@ var spec = false;
 var spritesheet;
 var spritesData;
 
+window.addEventListener(
+    "keydown",
+    function(e) {
+        if (
+            ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
+                e.code
+            ) > -1
+        ) {
+            e.preventDefault();
+        }
+    },
+    false
+);
+
 function findGetParameter(parameterName) {
     var result = null,
         tmp = [];
