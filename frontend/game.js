@@ -67,6 +67,23 @@ function setup() {
     frameRate(FPS);
     createCanvas(WIN_SIZE, WIN_SIZE);
     spritesData = createSpriteData(spritesheet);
+
+    document.getElementById("inputField").value = "snaaaake.com/game?id=" + id;
+}
+
+function copyToClipboard() {
+    var gameLink = document.getElementById("inputField");
+    gameLink.select();
+    gameLink.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+
+    var tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = "Copied to clipboard !";
+}
+
+function mouseOut() {
+    var tooltip = document.getElementById("tooltip");
+    tooltip.innerHTML = "Copy to clipboard";
 }
 
 function draw() {

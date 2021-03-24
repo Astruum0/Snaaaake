@@ -1,4 +1,4 @@
-const port = 3001;
+const port = 3003;
 
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
@@ -26,7 +26,7 @@ io.on("connection", (client) => {
 
     client.emit("init", {
         content: "Connected to the server",
-        id: gameStarted ? "spec" : id,
+        id: gameStarted || Object.keys(game.players).length == 4 ? "spec" : id,
     });
     if (!gameStarted) {
         client.on("addSnake", (data) => {
