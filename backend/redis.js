@@ -98,9 +98,6 @@ const getServerIDFromPort = (port) => {
     });
 };
 
-createNewServer(3001);
-createNewServer(3002);
-
 module.exports = {
     setServerStatus,
     setServerPlayers,

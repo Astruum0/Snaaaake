@@ -8,40 +8,38 @@
 
 <body>
     <main>
-        <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+        <div class="card text-white bg-primary mb-3" style="max-width: 20rem">
             <div class="card-header">Snaaaake</div>
             <div class="card-body">
-
-                <div id="player1" class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                <div id="player1" class="card text-white bg-secondary mb-3" style="max-width: 20rem">
                     <div id="username0" class="card-header"></div>
                     <div class="card-body">
-                        <img id="heart0" class="heart" src="" alt="">
+                        <img id="heart0" class="heart" src="" alt="" />
                     </div>
                 </div>
 
-                <div id="player2" class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                <div id="player2" class="card text-white bg-secondary mb-3" style="max-width: 20rem">
                     <div id="username1" class="card-header"></div>
                     <div class="card-body">
-                        <img id="heart1" class="heart" src="" alt="">
+                        <img id="heart1" class="heart" src="" alt="" />
                     </div>
                 </div>
 
-                <div id="player3" class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                <div id="player3" class="card text-white bg-secondary mb-3" style="max-width: 20rem">
                     <div id="username2" class="card-header"></div>
                     <div class="card-body">
-                        <img id="heart2" class="heart" src="" alt="">
+                        <img id="heart2" class="heart" src="" alt="" />
                     </div>
                 </div>
 
-                <div id="player4" class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+                <div id="player4" class="card text-white bg-secondary mb-3" style="max-width: 20rem">
                     <div id="username3" class="card-header"></div>
                     <div class="card-body">
-                        <img id="heart3" class="heart" src="" alt="">
+                        <img id="heart3" class="heart" src="" alt="" />
                     </div>
                 </div>
-
             </div>
-          </div>   
+        </div>
     </main>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
@@ -50,59 +48,23 @@
     <script src="game.js"></script>
 
     <script>
-        var currentState = {
-            food: {x: 0, y: 0},
-            players: {
-                "hgXt4" : {
-                    id: 0,
-                    name: "Astruum",
-                    composition: [],
-                    lives: 2,
-                    immune: false,
-                    color: "#7eff98"
-                },
-                "zAXR9" : {
-                    id: 1,
-                    name: "Mattemerde",
-                    composition: [],
-                    lives: 3,
-                    immune: false,
-                    color: "#96a8ff"
-                },
-                "zkT7s" : {
-                    id: 2,
-                    name: "Paul",
-                    composition: [],
-                    lives: 2,
-                    immune: false,
-                    color: "#ffb2cc"
-                },
-                "IjG5z" : {
-                    id: 3,
-                    name: "AD",
-                    composition: [],
-                    lives: 1,
-                    immune: false,
-                    color: "#ffba63"
-                },
-            },
-            deadPlayers: {},
-        }
-        var loop = setInterval(() => {
+        var autoRefresh = setInterval(() => {
             var hearts = document.getElementsByClassName("heart");
-            for (key in currentState.players){
-                id = currentState.players[key].id; 
-                lives = currentState.players[key].lives;  
+            for (key in currentState.players) {
+                id = currentState.players[key].id;
+                lives = currentState.players[key].lives;
                 name = currentState.players[key].name;
-                color = currentState.players[key].color;
-                document.getElementById("heart" + id).src = "../assets/" + lives +"_live.png"
-                document.getElementById("username" + id).innerHTML = name
-                document.getElementById("username" + id).style.color = color
-            }   
-            num_player = (Object.keys(currentState.players).length)
-            for (i = num_player + 1; i <= 4; i++){
+                Pcolor = currentState.players[key].color;
+                document.getElementById("heart" + id).src =
+                    "../assets/" + lives + "_live.png";
+                document.getElementById("username" + id).innerHTML = name;
+                document.getElementById("username" + id).style.color = Pcolor;
+            }
+            num_player = Object.keys(currentState.players).length;
+            for (i = num_player + 1; i <= 4; i++) {
                 document.getElementById("player" + i).remove();
             }
+            console.log(currentState);
         }, 100);
     </script>
 </body>

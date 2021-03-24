@@ -28,7 +28,7 @@ redisSocket.on("getPortFromID", (port) => {
     socket.on("init", (msg) => {
         console.log(msg.content);
         playerID = msg.id;
-        playerName = findGetParameter("name");
+        playerName = findGetParameter("username");
         if (playerID == "spec") {
             spec = true;
         }
@@ -52,7 +52,7 @@ var id = findGetParameter("id");
 if (id) {
     redisSocket.emit("sendID", id);
 } else {
-    //window.location.href = " ";
+    window.location.href = "http://127.0.0.1:5500/frontend/index.html";
 }
 
 redisSocket.on("getAllServers", (servers) => {
