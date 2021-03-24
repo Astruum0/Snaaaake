@@ -60,6 +60,9 @@ redisSocket.on("getPortFromID", (port) => {
         playerID = "spec";
         console.log("DEAD");
     });
+    socket.on("refresh", () => {
+        document.location.reload();
+    });
 });
 
 var id = findGetParameter("id");

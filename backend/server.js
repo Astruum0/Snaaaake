@@ -62,7 +62,9 @@ function gameLoop() {
                 game.setWinner(key);
                 setTimeout(() => {
                     setServerStatus(serverID, false);
-                    //console.log(users);
+                    for (var key in users) {
+                        users[key].emit("refresh");
+                    }
                 }, 3000);
                 clearInterval(loop);
                 break;
