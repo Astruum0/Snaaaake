@@ -6,6 +6,7 @@ redisSocket.on("getAllServers", (servers) => {
     refresh();
 });
 redisSocket.emit("getAllServers");
+var private_serv = 0
 
 function clear() {
     for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
@@ -18,6 +19,7 @@ function clear() {
 
 function refresh() {
     clear()
+    private_serv = 0
     container = document.getElementById("container");
     for (i = 0; i < Math.ceil(serversStates.length / 4); i++){
         var card_deck = document.createElement("div");
@@ -25,11 +27,13 @@ function refresh() {
         card_deck.id = "server" + i;
         container.appendChild(card_deck);
     }
+
+
     for (i = 0; i < serversStates.length; i++) {
         if (!serversStates[i].private) {
+            index = i - private_serv
             var id = serversStates[i].id
-
-            var server = document.getElementById("server" + Math.floor(i / 4));
+            var server = document.getElementById("server" + Math.floor(index / 4));
             if (serversStates[i].playing) {
                 var game_status = "En jeu";
                 var game_status_color = "bg-danger";
@@ -64,13 +68,14 @@ function refresh() {
             status.classList.add("card-text");
             status.innerHTML = "Status : " + game_status;
 
-            var username = document.getElementById("username").value
             var button = document.createElement("button");
+            var username = document.getElementById("username").value
 
             if(username != ""){
-                button.addEventListener("click", function() {
-                    window.location.href = "game.html?id=" + id + "&username=" + username
-                  });
+                var link = document.createElement("a");
+                link.href = "game.html?id=" + id + "&username=" + username
+                body.appendChild(link);
+                link.appendChild(button)
             } else {
                 button.addEventListener("click", function() {
                     error_div = document.createElement("div")
@@ -83,6 +88,7 @@ function refresh() {
                         $(error_div).fadeOut(500, function() { $(this).remove() })
                     }, 3000)
                 });
+                body.appendChild(button);
             }
             button.classList.add(
                 "btn",
@@ -99,7 +105,8 @@ function refresh() {
             card.appendChild(body);
             body.appendChild(title);
             body.appendChild(status);
-            body.appendChild(button)
+        } else {
+            private_serv += 1;
         }
     }
 }
