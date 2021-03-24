@@ -104,4 +104,5 @@ module.exports = {
     getServerIDFromPort,
     getAllServers,
     getServerInfos,
+    createNewServer,
 };

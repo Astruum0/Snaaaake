@@ -89,6 +89,10 @@ function refresh() {
     }
 }
 
+function createNewServer(private) {
+    redisSocket.emit("createNewServer", private);
+}
+
 function getserv() {
     redisSocket.emit("getAllServers");
 }
