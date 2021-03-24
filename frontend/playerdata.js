@@ -17,10 +17,12 @@ var autoRefresh = setInterval(() => {
         document.getElementById("heart" + id).style.display = "none";
         document.getElementById("username" + id).innerHTML = name;
         document.getElementById("username" + id).style.color = Pcolor;
-        card = document.getElementById("player" + (id+1))
+        card = document.getElementById("player" + (id + 1));
         card.classList.add("bg-dead");
     }
-    num_player = Object.keys(currentState.players).length + Object.keys(currentState.deadPlayers).length;
+    num_player =
+        Object.keys(currentState.players).length +
+        Object.keys(currentState.deadPlayers).length;
     for (i = 4; i > num_player; i--) {
         document.getElementById("player" + i).style.display = "none";
     }
