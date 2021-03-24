@@ -328,3 +328,8 @@ button.bg-secondary:focus {
     opacity: 0.2;
     margin-bottom: 5px;
 }
+
+.login-err {
+    position: absolute;
+    margin-left: -105px;
+}
