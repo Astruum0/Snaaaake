@@ -16,25 +16,19 @@ function clear() {
     }
 }
 
-function clear() {
-    for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
-        var card_deck = document.getElementById("server" + i);
-        if (typeof card_deck != "undefined" && card_deck != null) {
-            card_deck.remove();
-        }
-    }
-}
-
 function refresh() {
     clear()
     container = document.getElementById("container");
+    for (i = 0; i < Math.ceil(serversStates.length / 4); i++){
+        var card_deck = document.createElement("div");
+        card_deck.classList.add("card-deck");
+        card_deck.id = "server" + i;
+        container.appendChild(card_deck);
+    }
     for (i = 0; i < serversStates.length; i++) {
         if (!serversStates[i].private) {
             var id = serversStates[i].id
-            var card_deck = document.createElement("div");
-            card_deck.classList.add("card-deck");
-            card_deck.id = "server" + i;
-            container.appendChild(card_deck);
+
             var server = document.getElementById("server" + Math.floor(i / 4));
             if (serversStates[i].playing) {
                 var game_status = "En jeu";
