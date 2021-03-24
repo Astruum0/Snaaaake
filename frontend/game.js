@@ -8,6 +8,7 @@ var playerID;
 var spec = false;
 var spritesheet;
 var spritesData;
+var port = 3001;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -22,9 +23,7 @@ function findGetParameter(parameterName) {
     return result;
 }
 
-redisSocket.on("getPortFromID", (port) => {
     socket = io("http://localhost:" + port);
-
     socket.on("init", (msg) => {
         console.log(msg.content);
         playerID = msg.id;
@@ -46,14 +45,13 @@ redisSocket.on("getPortFromID", (port) => {
         playerID = "spec";
         console.log("DEAD");
     });
-});
 
-var id = findGetParameter("id");
-if (id) {
-    redisSocket.emit("sendID", id);
-} else {
-    window.location.href = "http://127.0.0.1:5500/frontend/index.html";
-}
+// var id = findGetParameter("id");
+// if (id) {
+//     redisSocket.emit("sendID", id);
+// } else {
+//     window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+// }
 
 redisSocket.on("getAllServers", (servers) => {
     console.log(servers);

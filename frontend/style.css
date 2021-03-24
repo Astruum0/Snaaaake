@@ -259,7 +259,7 @@ main {
   }
 
   .bg-secondary {
-    background-color: #555 !important;
+    background-color: rgb(55, 84, 55);
     margin-bottom: 5px;
   }
   
@@ -267,4 +267,10 @@ main {
   button.bg-secondary:hover,
   button.bg-secondary:focus {
     background-color: #3c3c3c !important;
+  }
+
+  .bg-dead {
+    background-color: rgb(90, 90, 90) !important;
+    opacity: 0.2;
+    margin-bottom: 5px;
   }
