@@ -265,22 +265,6 @@ canvas {
     margin-bottom: -1px;
 }
 
-.text-white {
-    color: #fff !important;
-}
-
-.bg-secondary {
-    background-color: #555 !important;
-    margin-bottom: 5px;
-}
-
-a.bg-secondary:hover,
-a.bg-secondary:focus,
-button.bg-secondary:hover,
-button.bg-secondary:focus {
-    background-color: #3c3c3c !important;
-}
-
 .tooltip {
     position: relative;
     display: inline-block;
@@ -321,4 +305,26 @@ button.bg-secondary:focus {
 
 .tooltip {
     opacity: 1;
+}
+
+.text-white {
+    color: #fff !important;
+}
+
+.bg-secondary {
+    background-color: rgb(55, 84, 55);
+    margin-bottom: 5px;
+}
+
+a.bg-secondary:hover,
+a.bg-secondary:focus,
+button.bg-secondary:hover,
+button.bg-secondary:focus {
+    background-color: #3c3c3c !important;
+}
+
+.bg-dead {
+    background-color: rgb(90, 90, 90) !important;
+    opacity: 0.2;
+    margin-bottom: 5px;
 }

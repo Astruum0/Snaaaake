@@ -67,27 +67,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
     <script src="graphics.js"></script>
     <script src="game.js"></script>
+    <script src= "playerdata.js"></script>
 
-    <script>
-        var autoRefresh = setInterval(() => {
-            var hearts = document.getElementsByClassName("heart");
-            for (key in currentState.players) {
-                id = currentState.players[key].id;
-                lives = currentState.players[key].lives;
-                name = currentState.players[key].name;
-                Pcolor = currentState.players[key].color;
-                document.getElementById("heart" + id).src =
-                    "../assets/" + lives + "_live.png";
-                document.getElementById("username" + id).innerHTML = name;
-                document.getElementById("username" + id).style.color = Pcolor;
-            }
-            num_player = Object.keys(currentState.players).length;
-            for (i = num_player + 1; i <= 4; i++) {
-                document.getElementById("player" + i).remove();
-            }
-            console.log(currentState);
-        }, 100);
-    </script>
 </body>
 
 </html>
