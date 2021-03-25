@@ -3,11 +3,20 @@ const port = 3000;
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
+const {
+    setServerStatus,
+    setServerPlayers,
+    getServerIDFromPort,
+} = require("./redis.js");
 
 const FPS = 30;
 const game = new Game();
 var users = {};
 var serverID;
+getServerIDFromPort(port).then((id) => {
+    serverID = id;
+    console.log(serverID);
+});
 
 var gameStarted = false;
 
@@ -25,6 +34,7 @@ io.on("connection", (client) => {
                 Object.keys(game.players).length,
                 data.pseudo
             );
+            setServerPlayers(serverID, Object.keys(game.players).length);
         });
         client.on("move", moveSnake);
         client.on("gameStart", startGame);
@@ -48,13 +58,21 @@ function gameLoop() {
         if (Object.keys(game.players).length == 1 && !game.winner) {
             for (key in game.players) {
                 gameStarted = false;
+
                 game.setWinner(key);
+                setTimeout(() => {
+                    setServerStatus(serverID, false);
+                    for (var key in users) {
+                        users[key].emit("refresh");
+                    }
+                }, 3000);
                 clearInterval(loop);
                 break;
             }
         }
         if (Object.keys(users).length == 0) {
             gameStarted = false;
+            setServerStatus(serverID, false);
             clearInterval(loop);
         }
     }, 1000 / FPS);
@@ -63,6 +81,10 @@ function gameLoop() {
 function clientLoop(clientID) {
     var clientloop = setInterval(() => {
         if (users[clientID].disconnected) {
+            if (gameStarted) {
+                game.deadPlayers[clientID] = game.players[clientID];
+            }
+
             delete users[clientID];
             delete game.players[clientID];
 
@@ -73,6 +95,8 @@ function clientLoop(clientID) {
                     i++;
                 }
             }
+
+            setServerPlayers(serverID, Object.keys(game.players).length);
             clearInterval(clientloop);
             return;
         }
@@ -90,6 +114,7 @@ function startGame() {
             gameLoop();
         }
         gameStarted = true;
+        setServerStatus(serverID, true);
     }
 }
 

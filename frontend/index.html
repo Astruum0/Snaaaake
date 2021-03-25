@@ -2,39 +2,41 @@
 <html lang="en">
 
 <head>
+    <title>Snaaaake - Salons</title>
     <link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
     <meta charset="utf-8" />
 </head>
 
-<body>
+<body onload="getserv();">
     <div class="aligncenter mt-1">
-        <img src="../assets/logo.png" width="400" class="rounded mx-auto d-block img-fluid mb-3" />
+        <div id="error_div"></div>
+        <img src="assets/logo.png" width="400" class="rounded mx-auto d-block img-fluid mb-3" />
 
         <div class="form-group">
-            <input class="form-control form-control-lg rounded mx-auto d-block" type="text"
-                placeholder="Entrez votre pseudo" id="inputLarge" />
+            <input id="username" oninput="getserv()" class="form-control form-control-lg rounded mx-auto d-block" type="text" placeholder="Entrez votre pseudo" id="inputLarge" />
         </div>
 
         <div class="btn-group btn-group-lg mb-3">
-            <button type="button" class="btn btn-primary">
-                Créer une partie public
-            </button>
-            <button type="button" class="btn btn-primary">
-                Créer une partie privée
-            </button>
+            <button type="button" onclick="createNewServer(false)" class="btn btn-primary">
+          Créer une partie publique
+        </button>
+            <button type="button" onclick="createNewServer(true)" class="btn btn-primary">
+          Créer une partie privée
+        </button>
         </div>
 
         <div id="container" class="jumbotron w-75 rounded mx-auto d-block">
             <h3 class="display-10 mb-3">
                 Serveurs publics :<button onclick="getserv();" class="btn btn-primary btn-lg rounded float-sm-right">
-                    Rafraichir
-                </button>
+            Rafraichir
+          </button>
             </h3>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>

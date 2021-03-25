@@ -11,7 +11,7 @@ var spritesData;
 
 window.addEventListener(
     "keydown",
-    function(e) {
+    function (e) {
         if (
             ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
                 e.code
@@ -29,7 +29,7 @@ function findGetParameter(parameterName) {
     location.search
         .substr(1)
         .split("&")
-        .forEach(function(item) {
+        .forEach(function (item) {
             tmp = item.split("=");
             if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
         });
@@ -70,11 +70,11 @@ var id = findGetParameter("id");
 if (id) {
     redisSocket.emit("sendID", id);
 } else {
-    window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+    window.location.href = "www.snaaaake.com/index.html";
 }
 var username = findGetParameter("username");
 if (!username) {
-    window.location.href = "http://127.0.0.1:5500/frontend/join.html?id=" + id;
+    window.location.href = "www.snaaaake.com/join.html?id=" + id;
 }
 
 redisSocket.on("getAllServers", (servers) => {
@@ -90,7 +90,7 @@ function setup() {
     createCanvas(WIN_SIZE, WIN_SIZE);
     spritesData = createSpriteData(spritesheet);
 
-    document.getElementById("inputField").value = "www.snaaaake.com/game?id=" + id;
+    document.getElementById("inputField").value = "www.snaaaake.com/game.html?id=" + id;
 }
 
 function copyToClipboard() {

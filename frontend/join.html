@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://bootswatch.com/4/cyborg/bootstrap.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <meta charset="utf-8" />
+</head>
+
+<body onload="refresh()">
+    <div class="centered">
+        <img src="../assets/logo.png" width="400" class="rounded mx-auto d-block img-fluid mb-3 mt-1" />
+        <div class="container aligncenter">
+            <div class="form-group">
+                <input id="username" oninput="refresh()" class="form-control form-control-lg rounded mx-auto d-block" type="text" placeholder="Entrez votre pseudo" id="inputLarge" />
+            </div>
+            <a id="joinLink">
+                <button id="joinButton" type="button" class="btn btn-primary">
+            Rejoindre
+          </button></a>
+        </div>
+    </div>
+    <script>
+        function findGetParameter(parameterName) {
+            var result = null,
+                tmp = [];
+            location.search
+                .substr(1)
+                .split("&")
+                .forEach(function(item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                });
+            return result;
+        }
+
+        var id = findGetParameter("id");
+        if (!id) {
+            window.location.href = "http://snaaaake.com";
+        }
+
+        const refresh = () => {
+            var username = document.getElementById("username").value;
+            var button = document.getElementById("joinButton");
+            if (username != "") {
+                var link = document.getElementById("joinLink");
+                link.href = "game.html?id=" + id + "&username=" + username;
+            } else {
+                var link = document.getElementById("joinLink");
+                link.href = "";
+            }
+        };
+    </script>
+</body>
+
+</html>
