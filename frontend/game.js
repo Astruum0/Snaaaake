@@ -66,10 +66,15 @@ redisSocket.on("getPortFromID", (port) => {
 });
 
 var id = findGetParameter("id");
+
 if (id) {
     redisSocket.emit("sendID", id);
 } else {
     window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+}
+var username = findGetParameter("username");
+if (!username) {
+    window.location.href = "http://127.0.0.1:5500/frontend/join.html?id=" + id;
 }
 
 redisSocket.on("getAllServers", (servers) => {
