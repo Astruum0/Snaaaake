@@ -65,8 +65,12 @@ redisSocket.on("getPortFromID", (port) => {
     });
 });
 
-redisSocket.on("redirect", () => {
-    window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+redisSocket.on("redirect", (id) => {
+    if (id) {
+        window.location.href = "http://127.0.0.1:5500/frontend/game.html + id";
+    } else {
+        window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+    }
 });
 
 var id = findGetParameter("id");

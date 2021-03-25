@@ -116,7 +116,7 @@ function refresh() {
 }
 
 function createNewServer(private) {
-    redisSocket.Socket.emit("createNewServer");
+    redisSocket.emit("createNewServer", private);
 }
 
 function getserv() {

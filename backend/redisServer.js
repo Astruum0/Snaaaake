@@ -42,6 +42,7 @@ io.on("connection", (client) => {
                         currentPort +
                         ":3000 snakefinal"
                     );
+                    client.emit("redirect", serverId);
 
                     break;
                 }
