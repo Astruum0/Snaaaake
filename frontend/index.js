@@ -115,8 +115,25 @@ function refresh() {
     }
 }
 
+function errorDiv() {
+    error_div = document.createElement("div")
+    error_div.innerText = "Veuillez choisir un pseudo"
+    error_div.classList.add("alert")
+    error_div.classList.add("alert-danger")
+    error_div.classList.add("login-err")
+    $(error_div).hide().appendTo(document.getElementById("error_div")).fadeIn(500);
+    setTimeout(function () {
+        $(error_div).fadeOut(500, function () { $(this).remove() })
+    }, 3000)
+}
+
 function createNewServer(private) {
-    redisSocket.emit("createNewServer", private);
+    var username = document.getElementById("username").value
+    if (username == "") {
+        errorDiv();
+    } else {
+        redisSocket.emit("createNewServer", private);
+    }
 }
 
 function getserv() {
