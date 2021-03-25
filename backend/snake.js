@@ -7,13 +7,16 @@ var start_coords = [
     [1, win_block_size - 2, "Up"],
     [win_block_size - 2, win_block_size - 2, "Left"],
 ];
+var colors = ["#4ACA64", "#6E86FF", "#FF2E73", "#F7B053"];
 
 class Snake {
-    constructor(id, name) {
+    constructor(id, name, colorId) {
         this.id = id;
         this.name = name;
         this.block_size = win_size / win_block_size;
-        this.composition = [start_coords[this.id]];
+        this.composition = [
+            [...start_coords[this.id]]
+        ];
         for (var i = 0; i < start_length; i++) {
             this.composition.push([
                 this.composition[0][0],
@@ -23,6 +26,24 @@ class Snake {
         }
         this.current_direction = start_coords[this.id][2];
         this.lives = 3;
+        this.immune = false;
+        this.color = colors[this.id];
+    }
+
+    updateId(id) {
+        this.id = id;
+        this.composition = [
+            [...start_coords[this.id]]
+        ];
+        for (var i = 0; i < start_length; i++) {
+            this.composition.push([
+                this.composition[0][0],
+                this.composition[0][1],
+                null,
+            ]);
+        }
+        this.current_direction = start_coords[this.id][2];
+        this.color = colors[this.id];
     }
 
     update(win_size) {
@@ -94,17 +115,25 @@ class Snake {
         return this.composition[0][0] == food.x && this.composition[0][1] == food.y;
     }
 
-    collide_with_others(players) {
-        for (var i = 0; i < players.length; i++) {
-            if (players[i].id != this.id) {
-                for (var j = 0; j < players[i].composition.length; j++) {
+    collide(players) {
+        for (var key in players) {
+            if (players[key].id != this.id && !players[key].immune) {
+                for (var j = 0; j < players[key].composition.length; j++) {
                     if (
-                        this.composition[0][0] == players[i].composition[j][0] &&
-                        this.composition[0][1] == players[i].composition[j][1]
+                        this.composition[0][0] == players[key].composition[j][0] &&
+                        this.composition[0][1] == players[key].composition[j][1]
                     ) {
                         return true;
                     }
                 }
+            }
+        }
+        for (var i = 1; i < this.composition.length; i++) {
+            if (
+                this.composition[0][0] == this.composition[i][0] &&
+                this.composition[0][1] == this.composition[i][1]
+            ) {
+                return true;
             }
         }
         return false;
@@ -117,6 +146,17 @@ class Snake {
             null,
         ];
         this.composition.push(new_block);
+    }
+
+    hit() {
+        this.lives = this.lives > 1 ? this.lives - 1 : 0;
+    }
+
+    setImmune(sc) {
+        this.immune = true;
+        setTimeout(() => {
+            this.immune = false;
+        }, sc * 1000);
     }
 }
 

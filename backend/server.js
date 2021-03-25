@@ -1,3 +1,5 @@
+const port = 3003;
+
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
@@ -5,6 +7,7 @@ const { Snake } = require("./snake");
 const FPS = 30;
 const game = new Game();
 var users = {};
+var serverID;
 
 var gameStarted = false;
 
@@ -14,7 +17,7 @@ io.on("connection", (client) => {
 
     client.emit("init", {
         content: "Connected to the server",
-        id: gameStarted ? "spec" : id,
+        id: gameStarted || Object.keys(game.players).length == 4 ? "spec" : id,
     });
     if (!gameStarted) {
         client.on("addSnake", (data) => {
@@ -34,6 +37,21 @@ function gameLoop() {
     var loop = setInterval(() => {
         if (gameStarted) {
             game.update();
+            var currentDeadSnakesID = game.deadSnakes();
+            for (var i = 0; i < currentDeadSnakesID.length; i++) {
+                users[currentDeadSnakesID[i]].emit("dead");
+                game.deadPlayers[currentDeadSnakesID[i]] =
+                    game.players[currentDeadSnakesID[i]];
+                delete game.players[currentDeadSnakesID[i]];
+            }
+        }
+        if (Object.keys(game.players).length == 1 && !game.winner) {
+            for (key in game.players) {
+                gameStarted = false;
+                game.setWinner(key);
+                clearInterval(loop);
+                break;
+            }
         }
         if (Object.keys(users).length == 0) {
             gameStarted = false;
@@ -47,6 +65,14 @@ function clientLoop(clientID) {
         if (users[clientID].disconnected) {
             delete users[clientID];
             delete game.players[clientID];
+
+            if (!gameStarted) {
+                var i = 0;
+                for (key in game.players) {
+                    game.players[key].updateId(i);
+                    i++;
+                }
+            }
             clearInterval(clientloop);
             return;
         }
@@ -59,10 +85,12 @@ function moveSnake(data) {
 }
 
 function startGame() {
-    if (!gameStarted) {
-        gameLoop();
+    if (Object.keys(game.players).length > 1) {
+        if (!gameStarted) {
+            gameLoop();
+        }
+        gameStarted = true;
     }
-    gameStarted = true;
 }
 
-io.listen(3000);
+io.listen(port);
