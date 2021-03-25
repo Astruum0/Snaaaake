@@ -16,7 +16,11 @@ io.on("connection", (client) => {
     });
     client.on("sendID", (id) => {
         getServerInfos(id).then((server) => {
-            client.emit("getPortFromID", server.port);
+            if (server == "error") {
+                client.emit("redirect");
+            } else {
+                client.emit("getPortFromID", server.port);
+            }
         });
     });
     client.on("createNewServer", (private) => {
