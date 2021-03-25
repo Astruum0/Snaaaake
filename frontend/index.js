@@ -6,6 +6,7 @@ redisSocket.on("getAllServers", (servers) => {
     refresh();
 });
 redisSocket.emit("getAllServers");
+var private_serv = 0;
 
 function clear() {
     for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
@@ -18,15 +19,20 @@ function clear() {
 
 function refresh() {
     clear();
+    private_serv = 0;
     container = document.getElementById("container");
+    for (i = 0; i < Math.ceil(serversStates.length / 4); i++) {
+        var card_deck = document.createElement("div");
+        card_deck.classList.add("card-deck");
+        card_deck.id = "server" + i;
+        container.appendChild(card_deck);
+    }
 
     for (i = 0; i < serversStates.length; i++) {
         if (!serversStates[i].private) {
-            var card_deck = document.createElement("div");
-            card_deck.classList.add("card-deck");
-            card_deck.id = "server" + i;
-            container.appendChild(card_deck);
-            var server = document.getElementById("server" + Math.floor(i / 4));
+            index = i - private_serv;
+            var id = serversStates[i].id;
+            var server = document.getElementById("server" + Math.floor(index / 4));
             if (serversStates[i].playing) {
                 var game_status = "En jeu";
                 var game_status_color = "bg-danger";
@@ -61,13 +67,33 @@ function refresh() {
             status.classList.add("card-text");
             status.innerHTML = "Status : " + game_status;
 
-            var form = document.createElement("a");
-            form.setAttribute(
-                "href",
-                "game.html?id=" + serversStates[i].id + "&username=" + "Matteo"
-            );
-
             var button = document.createElement("button");
+            var username = document.getElementById("username").value;
+
+            if (username != "") {
+                var link = document.createElement("a");
+                link.href = "game.html?id=" + id + "&username=" + username;
+                body.appendChild(link);
+                link.appendChild(button);
+            } else {
+                button.addEventListener("click", function() {
+                    error_div = document.createElement("div");
+                    error_div.innerText = "Veuillez choisir un pseudo";
+                    error_div.classList.add("alert");
+                    error_div.classList.add("alert-danger");
+                    error_div.classList.add("login-err");
+                    $(error_div)
+                        .hide()
+                        .appendTo(document.getElementById("error_div"))
+                        .fadeIn(500);
+                    setTimeout(function() {
+                        $(error_div).fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                    }, 3000);
+                });
+                body.appendChild(button);
+            }
             button.classList.add(
                 "btn",
                 game_button_class,
@@ -83,10 +109,14 @@ function refresh() {
             card.appendChild(body);
             body.appendChild(title);
             body.appendChild(status);
-            status.appendChild(form);
-            form.appendChild(button);
+        } else {
+            private_serv += 1;
         }
     }
+}
+
+function createNewServer(private) {
+    redisSocket.Socket.emit("createNewServer");
 }
 
 function getserv() {
