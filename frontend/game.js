@@ -1,5 +1,5 @@
 var socket;
-var redisSocket = io("http://localhost:3000");
+var redisSocket = io("http://www.snaaaake.com:3000");
 
 var WIN_SIZE = 600;
 var FPS = 30;
@@ -8,7 +8,7 @@ var playerID;
 var spec = false;
 var spritesheet;
 var spritesData;
-var port = 3001;
+var port = 3000;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -16,49 +16,49 @@ function findGetParameter(parameterName) {
     location.search
         .substr(1)
         .split("&")
-        .forEach(function(item) {
+        .forEach(function (item) {
             tmp = item.split("=");
             if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
         });
     return result;
 }
 
-    socket = io("http://localhost:" + port);
-    socket.on("init", (msg) => {
-        console.log(msg.content);
-        playerID = msg.id;
-        playerName = findGetParameter("username");
-        if (playerID == "spec") {
-            spec = true;
-        }
-        if (!spec) {
-            socket.emit("addSnake", {
-                pseudo: playerName ? playerName : "Player",
-                id: playerID,
-            });
-        }
-    });
-    socket.on("gameUpdate", (data) => {
-        currentState = JSON.parse(data);
-    });
-    socket.on("dead", () => {
-        playerID = "spec";
-        console.log("DEAD");
-    });
+socket = io("http://snaaaake.com:" + port);
+socket.on("init", (msg) => {
+    console.log(msg.content);
+    playerID = msg.id;
+    playerName = findGetParameter("username");
+    if (playerID == "spec") {
+        spec = true;
+    }
+    if (!spec) {
+        socket.emit("addSnake", {
+            pseudo: playerName ? playerName : "Player",
+            id: playerID,
+        });
+    }
+});
+socket.on("gameUpdate", (data) => {
+    currentState = JSON.parse(data);
+});
+socket.on("dead", () => {
+    playerID = "spec";
+    console.log("DEAD");
+});
 
-// var id = findGetParameter("id");
-// if (id) {
-//     redisSocket.emit("sendID", id);
-// } else {
-//     window.location.href = "http://127.0.0.1:5500/frontend/index.html";
-// }
+const id = findGetParameter("id");
+if (id) {
+    redisSocket.emit("sendID", id);
+} else {
+    window.location.href = "http://www.snaaaake.com/index.html";
+}
 
 redisSocket.on("getAllServers", (servers) => {
     console.log(servers);
 });
 
 function preload() {
-    spritesheet = loadImage("spritesheet.png");
+    spritesheet = loadImage("assets/spritesheet.png");
 }
 
 function setup() {
@@ -66,7 +66,7 @@ function setup() {
     createCanvas(WIN_SIZE, WIN_SIZE);
     spritesData = createSpriteData(spritesheet);
 
-    document.getElementById("inputField").value = "snaaaake.com/game?id=" + id;
+    document.getElementById("inputField").value = "snaaaake.com/game.html?id=" + id;
 }
 
 function copyToClipboard() {

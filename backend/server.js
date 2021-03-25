@@ -1,4 +1,4 @@
-const port = 3003;
+const port = 3000;
 
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");

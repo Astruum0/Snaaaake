@@ -1,4 +1,12 @@
 {
+  "name": "snaaaake",
+  "version": "1.0.0",
+  "description": "App NodeJS du jeu Snaaaake en docker",
+  "author": "Le Malgache",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "redis": "^3.0.2",
     "socket.io": "^2.4.1"
