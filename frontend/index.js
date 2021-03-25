@@ -6,7 +6,7 @@ redisSocket.on("getAllServers", (servers) => {
     refresh();
 });
 redisSocket.emit("getAllServers");
-var private_serv = 0
+var private_serv = 0;
 
 function clear() {
     for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
@@ -18,21 +18,20 @@ function clear() {
 }
 
 function refresh() {
-    clear()
-    private_serv = 0
+    clear();
+    private_serv = 0;
     container = document.getElementById("container");
-    for (i = 0; i < Math.ceil(serversStates.length / 4); i++){
+    for (i = 0; i < Math.ceil(serversStates.length / 4); i++) {
         var card_deck = document.createElement("div");
         card_deck.classList.add("card-deck");
         card_deck.id = "server" + i;
         container.appendChild(card_deck);
     }
 
-
     for (i = 0; i < serversStates.length; i++) {
         if (!serversStates[i].private) {
-            index = i - private_serv
-            var id = serversStates[i].id
+            index = i - private_serv;
+            var id = serversStates[i].id;
             var server = document.getElementById("server" + Math.floor(index / 4));
             if (serversStates[i].playing) {
                 var game_status = "En jeu";
@@ -69,24 +68,29 @@ function refresh() {
             status.innerHTML = "Status : " + game_status;
 
             var button = document.createElement("button");
-            var username = document.getElementById("username").value
+            var username = document.getElementById("username").value;
 
-            if(username != ""){
+            if (username != "") {
                 var link = document.createElement("a");
-                link.href = "game.html?id=" + id + "&username=" + username
+                link.href = "game.html?id=" + id + "&username=" + username;
                 body.appendChild(link);
-                link.appendChild(button)
+                link.appendChild(button);
             } else {
                 button.addEventListener("click", function() {
-                    error_div = document.createElement("div")
-                    error_div.innerText = "Veuillez choisir un pseudo"
-                    error_div.classList.add("alert")
-                    error_div.classList.add("alert-danger")
-                    error_div.classList.add("login-err")
-                    $(error_div).hide().appendTo(document.getElementById("error_div")).fadeIn(500);
+                    error_div = document.createElement("div");
+                    error_div.innerText = "Veuillez choisir un pseudo";
+                    error_div.classList.add("alert");
+                    error_div.classList.add("alert-danger");
+                    error_div.classList.add("login-err");
+                    $(error_div)
+                        .hide()
+                        .appendTo(document.getElementById("error_div"))
+                        .fadeIn(500);
                     setTimeout(function() {
-                        $(error_div).fadeOut(500, function() { $(this).remove() })
-                    }, 3000)
+                        $(error_div).fadeOut(500, function() {
+                            $(this).remove();
+                        });
+                    }, 3000);
                 });
                 body.appendChild(button);
             }
