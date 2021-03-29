@@ -43,12 +43,16 @@ const getAllServers = () => {
 };
 const getServerInfos = (id) => {
     return new Promise((resolve, reject) => {
-        redisClient.HGETALL(id, (err, res) => {
-            res.port = parseInt(res.port);
-            res.players = parseInt(res.players);
-            res.playing = res.playing == "true";
-            res.private = res.private == "true";
-            resolve(res);
+        redisClient.HGETALL(id, (_, res) => {
+            if (res == null) {
+                resolve("error");
+            } else {
+                res.port = parseInt(res.port);
+                res.players = parseInt(res.players);
+                res.playing = res.playing == "true";
+                res.private = res.private == "true";
+                resolve(res);
+            }
         });
     });
 };
@@ -102,6 +106,7 @@ module.exports = {
     setServerStatus,
     setServerPlayers,
     getServerIDFromPort,
+    deleteServer,
     getAllServers,
     getServerInfos,
 };

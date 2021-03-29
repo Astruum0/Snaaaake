@@ -10,6 +10,20 @@ var spritesheet;
 var spritesData;
 var port = 3001;
 
+window.addEventListener(
+    "keydown",
+    function(e) {
+        if (
+            ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
+                e.code
+            ) > -1
+        ) {
+            e.preventDefault();
+        }
+    },
+    false
+);
+
 function findGetParameter(parameterName) {
     var result = null,
         tmp = [];
@@ -23,6 +37,7 @@ function findGetParameter(parameterName) {
     return result;
 }
 
+redisSocket.on("getPortFromID", (port) => {
     socket = io("http://localhost:" + port);
     socket.on("init", (msg) => {
         console.log(msg.content);
@@ -45,17 +60,28 @@ function findGetParameter(parameterName) {
         playerID = "spec";
         console.log("DEAD");
     });
-
-// var id = findGetParameter("id");
-// if (id) {
-//     redisSocket.emit("sendID", id);
-// } else {
-//     window.location.href = "http://127.0.0.1:5500/frontend/index.html";
-// }
-
-redisSocket.on("getAllServers", (servers) => {
-    console.log(servers);
+    socket.on("refresh", () => {
+        document.location.reload();
+    });
 });
+
+redisSocket.on("redirect", (id) => {
+    if (id) {
+        window.location.href = "http://127.0.0.1:5500/frontend/game.html + id";
+    } else {
+        window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+    }
+});
+
+var id = findGetParameter("id");
+var username = findGetParameter("username");
+if (!id) {
+    window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+} else if (!username) {
+    window.location.href = "http://127.0.0.1:5500/frontend/join.html?id=" + id;
+} else {
+    redisSocket.emit("sendID", id);
+}
 
 function preload() {
     spritesheet = loadImage("spritesheet.png");
@@ -102,7 +128,7 @@ function keyPressed() {
         } else if (keyCode === RIGHT_ARROW) {
             socket.emit("move", { playerID: playerID, direction: "Right" });
         } else if (keyCode === 32) {
-            socket.emit("gameStart", 1);
+            socket.emit("gameStart", playerID);
         }
     }
 }

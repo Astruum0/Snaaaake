@@ -6,11 +6,12 @@ function drawState(state, sprites, count) {
         text(state.winner.name + " wins !", 0, 0, 600, 600);
     } else {
         fill(255, 0, 0);
-        image(
-            sprites.food,
-            state.food.x * state.food.size,
-            state.food.y * state.food.size
-        );
+        if (state.gameStarted)
+            image(
+                sprites.food,
+                state.food.x * state.food.size,
+                state.food.y * state.food.size
+            );
 
         // Players
         var i = 0;
@@ -122,6 +123,20 @@ function drawState(state, sprites, count) {
                 }
             }
         }
+    }
+    if (state.gameStarted == false) {
+        fill(255);
+        textSize(40);
+        textAlign(CENTER, CENTER);
+        text(
+            "Appuyez sur espace pour commencer la partie . . .\n" +
+            Object.keys(state.players).length +
+            "/4 joueurs connectés",
+            25,
+            25,
+            550,
+            550
+        );
     }
 }
 

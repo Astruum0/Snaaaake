@@ -7,19 +7,20 @@
     <meta charset="utf-8" />
 </head>
 
-<body>
+<body onload="getserv();">
     <div class="aligncenter mt-1">
+        <div id="error_div"></div>
         <img src="../assets/logo.png" width="400" class="rounded mx-auto d-block img-fluid mb-3" />
 
         <div class="form-group">
-            <input class="form-control form-control-lg rounded mx-auto d-block" type="text" placeholder="Entrez votre pseudo" id="inputLarge" />
+            <input id="username" oninput="getserv()" class="form-control form-control-lg rounded mx-auto d-block" type="text" placeholder="Entrez votre pseudo" id="inputLarge" />
         </div>
 
         <div class="btn-group btn-group-lg mb-3">
-            <button type="button" class="btn btn-primary">
-          Créer une partie public
+            <button type="button" onclick="createNewServer(false)" class="btn btn-primary">
+          Créer une partie publique
         </button>
-            <button type="button" class="btn btn-primary">
+            <button type="button" onclick="createNewServer(true)" class="btn btn-primary">
           Créer une partie privée
         </button>
         </div>
@@ -32,6 +33,7 @@
             </h3>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
     <script type="text/javascript" src="index.js"></script>
 </body>

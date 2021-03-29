@@ -1,4 +1,5 @@
 var autoRefresh = setInterval(() => {
+    var iteration = 0;
     for (key in currentState.players) {
         id = currentState.players[key].id;
         lives = currentState.players[key].lives;
@@ -6,8 +7,15 @@ var autoRefresh = setInterval(() => {
         Pcolor = currentState.players[key].color;
         document.getElementById("heart" + id).src =
             "../assets/" + lives + "_live.png";
-        document.getElementById("username" + id).innerHTML = name;
+        if (iteration == 0) {
+            document.getElementById("username" + id).innerHTML =
+                name + " <i class='fas fa-crown'></i>";
+        } else {
+            document.getElementById("username" + id).innerHTML = name;
+        }
+
         document.getElementById("username" + id).style.color = Pcolor;
+        iteration += 1;
     }
     for (key in currentState.deadPlayers) {
         id = currentState.deadPlayers[key].id;

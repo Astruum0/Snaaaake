@@ -22,6 +22,7 @@ class Game {
         this.players = {};
         this.deadPlayers = {};
         this.winner = null;
+        this.gameStarted = false;
     }
 
     update() {
