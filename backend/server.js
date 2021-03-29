@@ -1,5 +1,3 @@
-const port = 3000;
-
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
@@ -12,11 +10,26 @@ const {
 const FPS = 30;
 const game = new Game();
 var users = {};
-var serverID;
-getServerIDFromPort(port).then((id) => {
-    serverID = id;
-    console.log(serverID);
-});
+
+//Read Port from TXT
+
+
+const { readFileSync } = require('fs');
+
+//var port = readFileSync('txt/port.txt', 'utf-8');
+//var serverID = readFileSync('txt/serverID.txt', 'utf-8');
+
+var port = 3001;
+var serverID = HUUUH;
+
+console.log(port);
+console.log(serverID);
+
+//getServerIDFromPort(port).then((id) => {
+//  serverID = id;
+//console.log(serverID);
+//});
+//console.log(serverID);
 
 var gameStarted = false;
 
@@ -118,4 +131,4 @@ function startGame() {
     }
 }
 
-io.listen(port);
+io.listen(3000);

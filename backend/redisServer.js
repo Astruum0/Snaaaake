@@ -43,7 +43,7 @@ io.on("connection", (client) => {
             serverId +
             " -dp " +
             currentPort +
-            ":3000 snakefinal"
+            ":3000 -v /usr/share/nginx/html/Snaaaake/backend/txt:/txt snakefinal"
           );
         }
 
