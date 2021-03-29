@@ -30,7 +30,6 @@ io.on("connection", (client) => {
       for (var currentPort = 3001; currentPort < 3100; currentPort++) {
         if (!usedPorts.includes(currentPort)) {
           var serverId = createNewServer(currentPort, private);
-          containerNbr++;
           //Creation Docker
           const { exec } = require("child_process");
 
@@ -40,18 +39,13 @@ io.on("connection", (client) => {
           writeFileSync('/usr/share/nginx/html/Snaaaake/backend/txt/serverID.txt', serverId)
 
           exec(
-            "docker build -t container01 /usr/share/nginx/html/Snaaaake/backend/."
+            "docker run --name " +
+            serverId +
+            " -dp " +
+            currentPort +
+            ":3000 " +
+            serverId
           );
-          console.log(containerNbr);
-
-          //   exec(
-          //     "docker run --name " +
-          //     serverId +
-          //     " -dp " +
-          //     currentPort +
-          //     ":3000 " +
-          //     serverId
-          //   );
         }
 
         break;
