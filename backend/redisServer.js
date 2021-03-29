@@ -5,9 +5,10 @@ const {
   getAllServers,
   getServerInfos,
   createNewServer,
-} = require("./redis.js");
+} = require("./redisLocal.js");
 
 const io = require("socket.io")();
+var containerNbr = 0;
 
 io.on("connection", (client) => {
   client.on("getAllServers", () => {
@@ -29,23 +30,33 @@ io.on("connection", (client) => {
       for (var currentPort = 3001; currentPort < 3100; currentPort++) {
         if (!usedPorts.includes(currentPort)) {
           var serverId = createNewServer(currentPort, private);
+          containerNbr++;
           //Creation Docker
           const { exec } = require("child_process");
 
-          exec(
-            "docker run --name " +
-              serverId +
-              " -dp " +
-              currentPort +
-              ":3000 snakefinal"
-          );
+          const { writeFileSync } = require('fs');
 
-          break;
+          writeFileSync('/usr/share/nginx/html/Snaaaake/backend/txt/port.txt', currentPort)
+          writeFileSync('/usr/share/nginx/html/Snaaaake/backend/txt/serverID.txt', serverId)
+
+          exec(
+            "docker build -t container01 /usr/share/nginx/html/Snaaaake/backend/."
+          );
+          console.log(containerNbr);
+
+          //   exec(
+          //     "docker run --name " +
+          //     serverId +
+          //     " -dp " +
+          //     currentPort +
+          //     ":3000 " +
+          //     serverId
+          //   );
         }
+
+        break;
       }
     });
   });
 });
 io.listen(3000);
-
-
