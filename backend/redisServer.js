@@ -39,11 +39,11 @@ io.on("connection", (client) => {
           writeFileSync('/usr/share/nginx/html/Snaaaake/backend/txt/serverID.txt', serverId)
 
           exec(
-            "docker run --name " +
+            "docker run -itdv /usr/share/nginx/html/Snaaaake/backend/txt/.:/usr/src/app/txt/ --name " +
             serverId +
             " -dp " +
             currentPort +
-            ":3000 -v /usr/share/nginx/html/Snaaaake/backend/txt:/txt snakefinal"
+            ":3000 snakefinal"
           );
         }
 

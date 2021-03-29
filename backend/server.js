@@ -16,20 +16,11 @@ var users = {};
 
 const { readFileSync } = require('fs');
 
-//var port = readFileSync('txt/port.txt', 'utf-8');
-//var serverID = readFileSync('txt/serverID.txt', 'utf-8');
-
-var port = 3001;
-var serverID = HUUUH;
+var port = readFileSync('txt/port.txt', 'utf-8');
+var serverID = readFileSync('txt/serverID.txt', 'utf-8');
 
 console.log(port);
 console.log(serverID);
-
-//getServerIDFromPort(port).then((id) => {
-//  serverID = id;
-//console.log(serverID);
-//});
-//console.log(serverID);
 
 var gameStarted = false;
 
@@ -48,6 +39,7 @@ io.on("connection", (client) => {
                 data.pseudo
             );
             setServerPlayers(serverID, Object.keys(game.players).length);
+            console.log(Object.keys(game.players).length);
         });
         client.on("move", moveSnake);
         client.on("gameStart", startGame);
@@ -132,3 +124,4 @@ function startGame() {
 }
 
 io.listen(3000);
+
