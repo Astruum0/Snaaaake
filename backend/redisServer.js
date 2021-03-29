@@ -43,8 +43,7 @@ io.on("connection", (client) => {
             serverId +
             " -dp " +
             currentPort +
-            ":3000 " +
-            serverId
+            ":3000 snakefinal"
           );
         }
 
