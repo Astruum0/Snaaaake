@@ -1,11 +1,5 @@
-const {
-    setServerStatus,
-    setServerPlayers,
-    _,
-    getAllServers,
-    getServerInfos,
-} = require("./redis.js");
-
+const { getAllServers, getServerInfos } = require("./redis.js");
+const { writeFileSync } = require("fs");
 const io = require("socket.io")();
 
 io.on("connection", (client) => {
@@ -35,6 +29,7 @@ io.on("connection", (client) => {
                     //Creation Docker
                     const { exec } = require("child_process");
 
+                    writeFileSync("port", currentPort);
                     exec(
                         "docker run --name " +
                         serverId +

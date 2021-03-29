@@ -344,3 +344,7 @@ button.bg-secondary:focus {
     right: 0;
     margin: auto;
 }
+
+.fa-crown {
+    color: yellow;
+}

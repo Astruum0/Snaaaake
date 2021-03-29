@@ -83,10 +83,6 @@ if (!id) {
     redisSocket.emit("sendID", id);
 }
 
-redisSocket.on("getAllServers", (servers) => {
-    console.log(servers);
-});
-
 function preload() {
     spritesheet = loadImage("spritesheet.png");
 }
@@ -132,7 +128,7 @@ function keyPressed() {
         } else if (keyCode === RIGHT_ARROW) {
             socket.emit("move", { playerID: playerID, direction: "Right" });
         } else if (keyCode === 32) {
-            socket.emit("gameStart", 1);
+            socket.emit("gameStart", playerID);
         }
     }
 }

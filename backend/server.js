@@ -1,5 +1,3 @@
-const port = 3003;
-
 const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
@@ -7,10 +5,19 @@ const {
     setServerStatus,
     setServerPlayers,
     getServerIDFromPort,
+    deleteServer,
 } = require("./redis.js");
 
+const { readFileSync } = require("fs");
+const { exec } = require("child_process");
+
+var deleteServerTimeout;
+var shuttingdown = false;
+
+const port = readFileSync("port", { encoding: "utf8", flag: "r" });
 const FPS = 30;
 const game = new Game();
+
 var users = {};
 var serverID;
 getServerIDFromPort(port).then((id) => {
@@ -18,11 +25,26 @@ getServerIDFromPort(port).then((id) => {
     console.log(serverID);
 });
 
+var checkShutdownServerInterval = setInterval(() => {
+    if (Object.keys(game.players).length == 0 && !shuttingdown) {
+        deleteServerTimeout = setTimeout(() => {
+            console.log("Shutdown server . . .");
+            deleteServer(serverID);
+            exec("docker kill " + serverID);
+        }, 36000);
+        shuttingdown = true;
+    } else if (Object.keys(game.players).length > 0) {
+        shuttingdown = false;
+        clearInterval(deleteServerTimeout);
+    }
+}, 100);
 var gameStarted = false;
 
 io.on("connection", (client) => {
     var id = createRandomID();
     users[id] = client;
+
+    clearTimeout(deleteServerTimeout);
 
     client.emit("init", {
         content: "Connected to the server",
@@ -58,6 +80,7 @@ function gameLoop() {
         if (Object.keys(game.players).length == 1 && !game.winner) {
             for (key in game.players) {
                 gameStarted = false;
+                game.gameStarted = false;
 
                 game.setWinner(key);
                 setTimeout(() => {
@@ -72,6 +95,7 @@ function gameLoop() {
         }
         if (Object.keys(users).length == 0) {
             gameStarted = false;
+            game.gameStarted = false;
             setServerStatus(serverID, false);
             clearInterval(loop);
         }
@@ -108,12 +132,16 @@ function moveSnake(data) {
     game.players[data.playerID].move(data.direction);
 }
 
-function startGame() {
-    if (Object.keys(game.players).length > 1) {
+function startGame(playerId) {
+    if (
+        Object.keys(game.players).length > 1 &&
+        Object.keys(game.players)[0] == playerId
+    ) {
         if (!gameStarted) {
             gameLoop();
         }
         gameStarted = true;
+        game.gameStarted = true;
         setServerStatus(serverID, true);
     }
 }
