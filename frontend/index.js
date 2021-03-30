@@ -8,6 +8,14 @@ redisSocket.on("getAllServers", (servers) => {
 redisSocket.emit("getAllServers");
 var private_serv = 0;
 
+redisSocket.on("redirect", (id) => {
+    if (id) {
+        window.location.href = "game.html?id=" + id + "&username=" + document.getElementById("username").value;
+    } else {
+        window.location.href = "index.html";
+    }
+});
+
 function clear() {
     for (i = 0; i <= Math.ceil(serversStates.length / 4); i++) {
         var card_deck = document.getElementById("server" + i);
@@ -76,7 +84,7 @@ function refresh() {
                 body.appendChild(link);
                 link.appendChild(button);
             } else {
-                button.addEventListener("click", function() {
+                button.addEventListener("click", function () {
                     error_div = document.createElement("div");
                     error_div.innerText = "Veuillez choisir un pseudo";
                     error_div.classList.add("alert");
@@ -86,8 +94,8 @@ function refresh() {
                         .hide()
                         .appendTo(document.getElementById("error_div"))
                         .fadeIn(500);
-                    setTimeout(function() {
-                        $(error_div).fadeOut(500, function() {
+                    setTimeout(function () {
+                        $(error_div).fadeOut(500, function () {
                             $(this).remove();
                         });
                     }, 3000);

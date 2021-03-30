@@ -8,7 +8,6 @@ const {
 } = require("./redisLocal.js");
 
 const io = require("socket.io")();
-var containerNbr = 0;
 
 io.on("connection", (client) => {
   client.on("getAllServers", () => {
@@ -46,6 +45,7 @@ io.on("connection", (client) => {
             ":3000 snakefinal"
           );
         }
+        client.emit("redirect", serverId);
 
         break;
       }

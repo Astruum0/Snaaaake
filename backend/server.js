@@ -2,6 +2,7 @@ const io = require("socket.io")();
 const { Game, Food, createRandomID } = require("./game");
 const { Snake } = require("./snake");
 const {
+    getAllServers,
     setServerStatus,
     setServerPlayers,
     getServerIDFromPort,
@@ -12,8 +13,6 @@ const game = new Game();
 var users = {};
 
 //Read Port from TXT
-
-
 const { readFileSync } = require('fs');
 
 var port = readFileSync('txt/port.txt', 'utf-8');
@@ -22,7 +21,14 @@ var serverID = readFileSync('txt/serverID.txt', 'utf-8');
 console.log(port);
 console.log(serverID);
 
+getServerIDFromPort(port).then((id) => {
+    serverID = id;
+})
+    .catch(console.log);
+
 var gameStarted = false;
+
+getAllServers().then(console.log);
 
 io.on("connection", (client) => {
     var id = createRandomID();
@@ -39,7 +45,6 @@ io.on("connection", (client) => {
                 data.pseudo
             );
             setServerPlayers(serverID, Object.keys(game.players).length);
-            console.log(Object.keys(game.players).length);
         });
         client.on("move", moveSnake);
         client.on("gameStart", startGame);
