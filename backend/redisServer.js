@@ -43,11 +43,13 @@ io.on("connection", (client) => {
             " -dp " +
             currentPort +
             ":3000 snakefinal"
-          );
-        }
-        client.emit("redirect", serverId);
+          )
 
-        break;
+          client.emit("redirect", serverId);
+
+
+          break;
+        }
       }
     });
   });

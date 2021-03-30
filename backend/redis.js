@@ -74,7 +74,7 @@ const setServerPlayers = (id, nbr) => {
     redisClient.HSET(id, "players", nbr);
 };
 
-const createNewServer = (port, private) => {
+const createNewServer = (port, private = true) => {
     var id = generateNewId(5);
 
     redisClient.HSET(

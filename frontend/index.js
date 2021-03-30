@@ -135,7 +135,7 @@ function errorDiv() {
     }, 3000)
 }
 
-function createNewServer(private) {
+function createNewServer(private = true) {
     var username = document.getElementById("username").value
     if (username == "") {
         errorDiv();
