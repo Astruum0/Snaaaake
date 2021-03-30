@@ -1,7 +1,7 @@
 const redis = require("redis");
 const redisClient = redis.createClient();
 
-redisClient.on("error", function (error) {
+redisClient.on("error", function(error) {
     console.error(error);
 });
 
@@ -106,4 +106,5 @@ module.exports = {
     getServerInfos,
     createNewServer,
 };
+
 

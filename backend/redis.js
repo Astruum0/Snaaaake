@@ -117,8 +117,10 @@ module.exports = {
     setServerStatus,
     setServerPlayers,
     getServerIDFromPort,
+    deleteServer,
     getAllServers,
     getServerInfos,
     createNewServer,
 };
+
 

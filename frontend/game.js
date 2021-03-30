@@ -1,5 +1,5 @@
 var socket;
-var redisSocket = io("http://www.snaaaake.com:3000");
+var redisSocket = io("http://localhost:3000");
 
 var WIN_SIZE = 600;
 var FPS = 30;
@@ -8,20 +8,7 @@ var playerID;
 var spec = false;
 var spritesheet;
 var spritesData;
-
-window.addEventListener(
-    "keydown",
-    function (e) {
-        if (
-            ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].indexOf(
-                e.code
-            ) > -1
-        ) {
-            e.preventDefault();
-        }
-    },
-    false
-);
+var port = 3001;
 
 function findGetParameter(parameterName) {
     var result = null,
@@ -29,16 +16,14 @@ function findGetParameter(parameterName) {
     location.search
         .substr(1)
         .split("&")
-        .forEach(function (item) {
+        .forEach(function(item) {
             tmp = item.split("=");
             if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
         });
     return result;
 }
 
-redisSocket.on("getPortFromID", (port) => {
-    socket = io("http://www.snaaaake.com:" + port);
-
+    socket = io("http://localhost:" + port);
     socket.on("init", (msg) => {
         console.log(msg.content);
         playerID = msg.id;
@@ -60,29 +45,20 @@ redisSocket.on("getPortFromID", (port) => {
         playerID = "spec";
         console.log("DEAD");
     });
-    socket.on("refresh", () => {
-        document.location.reload();
-    });
-});
 
-var id = findGetParameter("id");
-
-if (id) {
-    redisSocket.emit("sendID", id);
-} else {
-    window.location.href = "www.snaaaake.com/index.html";
-}
-var username = findGetParameter("username");
-if (!username) {
-    window.location.href = "www.snaaaake.com/join.html?id=" + id;
-}
+// var id = findGetParameter("id");
+// if (id) {
+//     redisSocket.emit("sendID", id);
+// } else {
+//     window.location.href = "http://127.0.0.1:5500/frontend/index.html";
+// }
 
 redisSocket.on("getAllServers", (servers) => {
     console.log(servers);
 });
 
 function preload() {
-    spritesheet = loadImage("assets/spritesheet.png");
+    spritesheet = loadImage("spritesheet.png");
 }
 
 function setup() {
@@ -90,7 +66,7 @@ function setup() {
     createCanvas(WIN_SIZE, WIN_SIZE);
     spritesData = createSpriteData(spritesheet);
 
-    document.getElementById("inputField").value = "www.snaaaake.com/game.html?id=" + id;
+    document.getElementById("inputField").value = "snaaaake.com/game?id=" + id;
 }
 
 function copyToClipboard() {

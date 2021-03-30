@@ -5,8 +5,12 @@ const {
     getAllServers,
     setServerStatus,
     setServerPlayers,
+    deleteServer,
     getServerIDFromPort,
 } = require("./redis.js");
+
+var deleteServerTimeout;
+var shuttingdown = false;
 
 const FPS = 30;
 const game = new Game();
@@ -26,6 +30,20 @@ getServerIDFromPort(port).then((id) => {
 })
     .catch(console.log);
 
+var checkShutdownServerInterval = setInterval(() => {
+    if (Object.keys(game.players).length == 0 && !shuttingdown) {
+        deleteServerTimeout = setTimeout(() => {
+            console.log("Shutdown server . . .");
+            deleteServer(serverID);
+            exec("docker kill " + serverID);
+        }, 36000);
+        shuttingdown = true;
+    } else if (Object.keys(game.players).length > 0) {
+        shuttingdown = false;
+        clearInterval(deleteServerTimeout);
+    }
+}, 100);
+
 var gameStarted = false;
 
 getAllServers().then(console.log);
@@ -33,6 +51,7 @@ getAllServers().then(console.log);
 io.on("connection", (client) => {
     var id = createRandomID();
     users[id] = client;
+   clearTimeout(deleteServerTimeout);
 
     client.emit("init", {
         content: "Connected to the server",
@@ -68,6 +87,7 @@ function gameLoop() {
         if (Object.keys(game.players).length == 1 && !game.winner) {
             for (key in game.players) {
                 gameStarted = false;
+		game.gameStarted = false;
 
                 game.setWinner(key);
                 setTimeout(() => {
@@ -82,6 +102,7 @@ function gameLoop() {
         }
         if (Object.keys(users).length == 0) {
             gameStarted = false;
+game.gameStarted = false;
             setServerStatus(serverID, false);
             clearInterval(loop);
         }
@@ -118,15 +139,20 @@ function moveSnake(data) {
     game.players[data.playerID].move(data.direction);
 }
 
-function startGame() {
-    if (Object.keys(game.players).length > 1) {
+function startGame(playerId) {
+    if (
+        Object.keys(game.players).length > 1 &&
+        Object.keys(game.players)[0] == playerId
+    ) {
         if (!gameStarted) {
             gameLoop();
         }
         gameStarted = true;
+        game.gameStarted = true;
         setServerStatus(serverID, true);
     }
 }
 
 io.listen(3000);
+
 

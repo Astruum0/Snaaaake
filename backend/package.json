@@ -8,7 +8,17 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "fetch": "^1.1.0",
+    "file-api": "^0.10.4",
+    "filereader": "^0.10.3",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
+    "io": "^1.0.3",
+    "node-fetch": "^2.6.1",
+    "path": "^0.12.7",
     "redis": "^3.0.2",
-    "socket.io": "^2.4.1"
+    "request": "^2.88.2",
+    "socket.io": "^2.4.1",
+    "socket.io-client": "^4.0.0"
   }
 }
