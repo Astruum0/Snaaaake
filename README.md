@@ -37,9 +37,11 @@ Docker (`sudo apt install docker-ce docker-ce-cli containerd.io`/`sudo pacman -S
 Installation du jeu en local
 
 1. Cloner le repo git (https://github.com/Astruum0/Snaaaake)
-2. Effectuer la commande `npm install` pour installer toutes les dépendances
-3. Se rendre dans le dossier backend/
-4. Effectuer la commande `node redisServer.js` pour écouter les demandes de création de salon
-5. Effectuer la commande `npm run start --port 8080` ou tout port autre que 3000 pour lancer un serveur local
-6. Se rendre sur `localhost:8080/frontend/index.html`
-7. Profit !
+2. Se rendre dans le dossier `cd Snaaaake`
+3. Effectuer la commande `npm install` pour installer toutes les dépendances
+4. Se rendre dans le dossier backend/
+5. Installer l'image docker avec `docker build -t snakefinal .`
+6. Effectuer la commande `node redisServer.js` pour écouter les demandes de création de salon. Laisser le shell tourner
+7. Effectuer la commande `npx http-server`. Dites oui pour installer le serveur web.
+8. Se rendre sur `localhost:8080/frontend/index.html`
+9. Profit !
